@@ -2,8 +2,10 @@
 from django.shortcuts import render
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.decorators import api_view
 from .models import User
 from .serializers import UserSerializer
+
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -14,7 +16,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response({'success': True, 'data': serializer.data}, status=status.HTTP_201_CREATED, headers=headers)
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
